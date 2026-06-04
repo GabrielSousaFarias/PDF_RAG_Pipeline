@@ -1,0 +1,4 @@
+[run]
+omit =
+    worker/consumer.py
+    tests/*
