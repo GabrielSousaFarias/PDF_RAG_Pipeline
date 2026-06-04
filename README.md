@@ -167,11 +167,17 @@ Este projeto demonstra conhecimentos em:
 
 ## 👨‍💻 Autor
 
-Gabriel Sousa
+<p align="left">
+  <img align="left" width="150" src="https://raw.githubusercontent.com/GabrielSousaFarias/GabrielSousaFarias/main/Analista%20de%20dados%20senior.png">
+ <br>
+  Sou <strong>Gabriel Sousa - Analista de Dados Sênior</strong> apaixonado por dados, automação e tecnologia.
 
-Analista e Engenheiro de Dados com experiência em Business Intelligence, Engenharia de Dados, Automação de Processos e Arquiteturas Distribuídas.
+  Atuo na construção de soluções que transformam dados em decisões estratégicas por meio de dashboards, pipelines de dados, automações e aplicações baseadas em Inteligência Artificial.
 
-Este projeto foi desenvolvido para explorar padrões amplamente utilizados em ambientes corporativos modernos, incluindo processamento assíncrono, mensageria e microsserviços.
+  Possuo experiência em Inteligência Artificial, Machine Learning, RAG, LLM's, Business Intelligence, Engenharia de Dados, Python, SQL, Databricks, Airflow, DBT e Power BI, sempre buscando desenvolver soluções escaláveis, eficientes e orientadas a resultados.
+</p>
+
+Este projeto foi desenvolvido para explorar padrões amplamente utilizados em ambientes corporativos modernos.
 
 📫 Vamos nos conectar:
 
