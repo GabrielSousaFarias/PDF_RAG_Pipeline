@@ -1,169 +1,199 @@
-# PDF Parser Pipeline
+# PDF RAG Pipeline
+
 ### 📌 Visão Geral
->O PDF Parser Pipeline é uma solução orientada a eventos desenvolvida para automatizar o processamento de documentos PDF em larga escala.
+
+>O **PDF RAG Pipeline** é uma plataforma de processamento documental e recuperação inteligente de conhecimento baseada em **Retrieval-Augmented Generation (RAG)**.
 >
->A aplicação recebe arquivos através de uma API REST construída com FastAPI, publica eventos em Apache Kafka e realiza o processamento assíncrono dos documentos através de workers especializados, permitindo escalabilidade horizontal e desacoplamento entre os componentes do sistema.
+>Este projeto surgiu como uma evolução do projeto **[PDF Parser Pipeline](https://github.com/GabrielSousaFarias/PDF_Parser_Pipeline)**, cuja proposta inicial era realizar o processamento assíncrono de documentos PDF utilizando FastAPI, Apache Kafka e Python. Nesta nova versão, a solução expande significativamente suas capacidades ao incorporar uma camada de Inteligência Artificial capaz de transformar documentos em uma base de conhecimento pesquisável.
 >
->Este projeto foi desenvolvido com foco em arquiteturas modernas de Engenharia de Dados, Microsserviços e Processamento Distribuído.
+>Após o processamento dos arquivos, o conteúdo é extraído, estruturado, segmentado em unidades menores de informação (*chunks*), convertido em embeddings vetoriais e armazenado em um banco vetorial. A partir desse momento, os documentos deixam de ser apenas arquivos estáticos e passam a compor uma base de conhecimento capaz de responder perguntas em linguagem natural por meio de busca semântica.
+>
+>O projeto demonstra conceitos modernos de Engenharia de Dados, IA Generativa, Processamento de Documentos e Arquiteturas Orientadas a Conhecimento, simulando cenários reais encontrados em assistentes corporativos, plataformas de suporte à decisão e sistemas de busca inteligente.
+
+
 
 ### 🎯 Objetivo
 
-Construir uma arquitetura escalável para processamento assíncrono de documentos PDF utilizando Apache Kafka e FastAPI, simulando cenários reais encontrados em ambientes corporativos de Engenharia de Dados e Back-end.
+Construir uma solução escalável para processamento documental e recuperação semântica de informações, permitindo transformar documentos PDF em uma base de conhecimento pesquisável e pronta para integração com Large Language Models (LLMs).
 
 ### 🚀 Problema Resolvido
 
-Muitas organizações recebem diariamente centenas ou milhares de documentos em PDF contendo informações críticas para seus processos.
+Empresas acumulam diariamente grandes volumes de documentos contendo informações relevantes para suas operações:
 
-Entre os principais desafios estão:
+* Manuais técnicos
+* Contratos
+* Relatórios
+* Procedimentos internos
+* Documentação de sistemas
+* Materiais de treinamento
 
-- Processamento manual de documentos
-- Gargalos em sistemas síncronos
-- Baixa escalabilidade
-- Dificuldade de integração com sistemas analíticos
-- Necessidade de extração automática de dados
+Embora essas informações estejam disponíveis, muitas vezes sua localização é lenta e depende de consultas manuais.
 
-Este projeto demonstra uma arquitetura capaz de processar documentos de forma assíncrona, resiliente e escalável.
+O PDF RAG Pipeline resolve esse problema ao permitir que os documentos sejam pesquisados por significado e contexto, reduzindo o tempo necessário para localizar informações e aumentando o aproveitamento do conhecimento organizacional.
+
+
 
 ### 🏗 Arquitetura da Solução
->Cliente -> FastAPI -> Apache Kafka -> PDF Worker -> Parser Engine -> JSON Estruturado
 
-#### Fluxo:
-- Usuário envia um PDF para a API.
-- A API armazena o arquivo.
-- Um evento é publicado no Kafka.
-- Um Worker consome a mensagem.
-- O PDF é processado.
-- Os dados extraídos são transformados em JSON.
-- O resultado fica disponível para consumo por outros sistemas.
-
-### 📊 Principais Benefícios
-- Escalabilidade
-    - Novos Workers podem ser adicionados sem alterar a API.
-- Desacoplamento
-    - O upload do documento é independente do processamento.
-- Resiliência
-    - Falhas no parser não impactam a disponibilidade da API.
-- Performance
-    - Permite processamento paralelo de múltiplos documentos.
-- Observabilidade
-    - Estrutura preparada para integração com logs, métricas e monitoramento.
-
-### 📁 Estrutura do Projeto
-pdf-parser-pipeline/
-│
-├── app/
-│   ├── main.py
-│   ├── kafka_producer.py
-│   ├── storage.py
-│   └── config.py
-│
-├── worker/
-│   ├── consumer.py
-│   └── pdf_parser.py
-│
-├── data/
-│   ├── uploads/
-│   └── results/
-│
-├── docker-compose.yml
-└── requirements.txt
-
-### 🚀 Como Executar
-
-#### Subir Kafka
-```bash
-docker compose up -d
-```
-#### Iniciar API
-```bash
-uvicorn app.main:app --reload
-```
-#### Iniciar Worker
-```bash
-python -m worker.consumer
-```
-#### Swagger
-
-http://localhost:8000/docs
-
-### ✅ Testes Automatizados
-
-O projeto possui testes automatizados utilizando **Pytest**, cobrindo componentes críticos da aplicação, incluindo configurações, armazenamento de arquivos, API e processamento de documentos.
-
-Os testes contribuem para a confiabilidade da solução, permitindo validar alterações futuras com segurança e reduzindo a probabilidade de regressões. Além disso, a utilização de cobertura de código (`pytest-cov`) possibilita acompanhar a qualidade dos testes e identificar áreas que necessitam de maior validação.
-
-#### Executando os testes
-
-```bash
-python -m pytest
-```
-
-#### Executando os testes com cobertura
-
-```bash
-python -m pytest --cov=app --cov=worker
+```text
+Usuário
+   │
+   ▼
+FastAPI
+   │
+   ▼
+PDF Upload
+   │
+   ▼
+Parser Engine
+   │
+   ▼
+Text Chunking
+   │
+   ▼
+Embedding Model
+   │
+   ▼
+Vector Database
+   │
+   ▼
+Semantic Search
+   │
+   ▼
+RAG Response
 ```
 
 
-## 💼 Casos de Uso
-- Processamento de notas fiscais
-- Processamento de contratos
-- Extração de informações de currículos
-- Digitalização de documentos
-- Indexação para sistemas de IA
-- Pipelines de ingestão documental
+### 🔄 Fluxo de Processamento
 
-### 🚧 Próximas Evoluções
-* OCR de documentos utilizando Tesseract para processamento de PDFs digitalizados.
-* Armazenamento de documentos e resultados em Data Lake (S3, ADLS ou MinIO).
-* Processamento distribuído com múltiplos consumidores Kafka para aumento de throughput.
-* Implementação de Dead Letter Queue (DLQ) para tratamento de falhas.
-* Estratégias de Retry automático para mensagens com erro.
-* Extração inteligente de entidades como CPF, CNPJ, datas, valores monetários e informações contratuais.
-* Classificação automática de documentos utilizando Machine Learning e LLMs.
-* Integração com Apache Airflow para orquestração de pipelines.
-* Observabilidade com Prometheus, Grafana e OpenTelemetry.
-* Indexação dos documentos em banco vetorial para soluções RAG.
-* Integração com modelos de IA para consultas em linguagem natural sobre documentos processados.
-* Deploy em Kubernetes com escalabilidade horizontal automática.
-* Implementação de autenticação e autorização utilizando JWT.
-* Criação de API para consulta de status e histórico de processamento.
-* Monitoramento de métricas operacionais e SLA dos consumidores Kafka.
+1. O usuário envia um documento PDF.
+2. O conteúdo textual é extraído.
+3. O texto é dividido em chunks.
+4. Cada chunk é convertido em embedding vetorial.
+5. Os embeddings são armazenados em um banco vetorial.
+6. O usuário realiza perguntas em linguagem natural.
+7. O mecanismo de busca semântica recupera os trechos mais relevantes.
+8. As informações recuperadas são utilizadas para compor a resposta do sistema.
+
+
+### 📚 Base de Conhecimento Utilizada
+
+Para demonstração do pipeline, foi utilizado o livro:
+
+**Lógica de Programação para Iniciantes**
+
+O material permite validar consultas semânticas relacionadas a:
+
+* Algoritmos
+* Lógica de programação
+* Estruturas condicionais
+* Estruturas de repetição
+* Conceitos fundamentais de desenvolvimento de software
+
+Exemplos de perguntas:
+
+```text
+O que é um algoritmo?
+
+Qual a diferença entre compilador e interpretador?
+
+Como funcionam estruturas de repetição?
+
+Por que aprender lógica de programação?
+```
 
 
 ### ⚙ Tecnologias Utilizadas
+
 - Backend
-    - Python
-    - FastAPI
-    - Uvicorn
-- Mensageria
-    - Apache Kafka
-    - Confluent Kafka Python
+    * Python
+    * FastAPI
+    * Uvicorn
 - Processamento de Documentos
-    - PyMuPDF
+    * PyMuPDF
+- Inteligência Artificial
+    * Sentence Transformers
+    * Embeddings
+    * Retrieval-Augmented Generation (RAG)
+- Banco Vetorial
+    * ChromaDB
 - Infraestrutura
-    - Docker
-    - Docker Compose
+    * Docker
+    * Docker Compose
 - Arquitetura
-    - Event Driven Architecture (EDA)
-    - Producer / Consumer Pattern
-    - Asynchronous Processing
-    - Microservices Ready
+    * Knowledge Retrieval
+    * Semantic Search
+    * Vector Search
+    * AI Ready Architecture
+    * Microservices Ready
+
+
+### 📊 Principais Benefícios
+
+#### Busca Semântica
+
+Permite localizar informações com base no significado e contexto das perguntas.
+
+#### Reaproveitamento do Conhecimento
+
+Transforma documentos estáticos em bases de conhecimento reutilizáveis.
+
+#### Escalabilidade
+
+Novos documentos podem ser adicionados continuamente sem necessidade de reprocessar toda a base.
+
+#### Integração com IA
+
+Estrutura preparada para utilização com Large Language Models.
+
+#### Flexibilidade
+
+Pode ser utilizado em diferentes cenários corporativos, educacionais e analíticos.
+
+
+### 💼 Casos de Uso
+
+* Assistentes corporativos
+* Busca inteligente em documentação técnica
+* Consulta de manuais operacionais
+* Bases de conhecimento internas
+* Plataformas educacionais
+* Sistemas de suporte ao cliente
+* Pesquisa em contratos e regulamentos
+* Chatbots especializados
+
+
+#### 🚧 Próximas Evoluções
+
+* Integração com LLMs locais utilizando Ollama
+* Suporte a múltiplos documentos simultaneamente
+* OCR com Tesseract
+* Extração automática de entidades
+* Reranking de resultados
+* Banco vetorial distribuído
+* Observabilidade com OpenTelemetry
+* Deploy em Kubernetes
+* Interface Web para consultas
+* Sistema de autenticação e autorização
+* Histórico de conversas e consultas
+
 
 ### 💡 Competências Demonstradas
 
 Este projeto demonstra conhecimentos em:
-- Engenharia de Dados
-- Arquiteturas Distribuídas
-- Apache Kafka
-- FastAPI
-- Processamento Assíncrono
-- Microsserviços
-- APIs REST
-- Docker
-- Python
-- Processamento de Documentos
-- Arquiteturas Event Driven
+
+* Engenharia de Dados
+* Inteligência Artificial Generativa
+* Retrieval-Augmented Generation (RAG)
+* Processamento de Documentos
+* Embeddings Vetoriais
+* Bancos Vetoriais
+* FastAPI
+* Python
+* ChromaDB
+* Arquiteturas Escaláveis
+* Busca Semântica
+* Arquiteturas Orientadas a Conhecimento
 
 ## 👨‍💻 Autor
 
